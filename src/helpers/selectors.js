@@ -1,4 +1,4 @@
-function getAppointmentsForDay(state, day) {
+export function getAppointmentsForDay(state, day) {
   let result = [];
   const filter = state.days.filter(days => days.name === day)
     .map(appointment => appointment.appointments)
@@ -9,5 +9,4 @@ function getAppointmentsForDay(state, day) {
   return result;
 }
 
-module.exports = { getAppointmentsForDay };
 
