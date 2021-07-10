@@ -6,6 +6,7 @@ export default function useApplicationData() {
   const SET_DAY = "SET_DAY";
   const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
   const SET_INTERVIEW = "SET_INTERVIEW";
+  const SET_DAYS = "SET_DAYS";
 
   function reducer(state, action) {
     switch (action.type) {
@@ -27,7 +28,12 @@ export default function useApplicationData() {
             ...state.appointments[action.id],
             interview: action.interview === null ? null :  action.interview 
           }},
-          
+        }
+      }
+      case SET_DAYS: {
+        return {
+          ...state,
+          days: action.days
         }
       }
       default:
@@ -52,15 +58,27 @@ export default function useApplicationData() {
     return axios.put(`api/appointments/${id}`, {interview})
       .then(() => {
         dispatch({ type: SET_INTERVIEW, id, interview });
-      })
+      }).then(() =>
+        axios.get("/api/days")
+          .then(res => {
+            dispatch({type: SET_DAYS, days: res.data })
+          }
+        )
+      );
   }
 
   function cancelInterview(id) {
 
     return axios.delete(`api/appointments/${id}`)
-      .then(res => {
+      .then(() => {
         dispatch({ type: SET_INTERVIEW, id, interview: null });
-      });
+      }).then(() =>
+        axios.get("/api/days")
+          .then(res => {
+            dispatch({type: SET_DAYS, days: res.data })
+          }
+        )
+      );
   }
 
   useEffect(() => {
