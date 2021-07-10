@@ -26,12 +26,17 @@ export default function useApplicationData() {
     };
 
     return axios.put(`api/appointments/${id}`, appointment)
-    .then(() => {
+      .then(() => {
         setState({
         ...state,
         appointments
-      });
-    });
+        });
+      })
+      .then(() => axios.get("/api/days")
+        .then((res) => {
+          setState(prev => ({...prev, days: res.data }))
+        })
+      );
   }
 
   function cancelInterview(id) {
@@ -51,8 +56,13 @@ export default function useApplicationData() {
         setState({
         ...state,
         appointments
-      });
-    });
+        });
+      })
+      .then(() => axios.get("/api/days")
+        .then((res) => {
+          setState(prev => ({...prev, days: res.data }))
+        })
+      );
   }
 
   useEffect(() => {
