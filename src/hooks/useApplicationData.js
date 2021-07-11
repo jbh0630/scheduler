@@ -6,6 +6,7 @@ export default function useApplicationData() {
   const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
   const SET_INTERVIEW = "SET_INTERVIEW";
   const SET_DAYS = "SET_DAYS";
+  const socket = new WebSocket('ws://localhost:8001');
 
   function reducer(state, action) {
     switch (action.type) {
@@ -92,6 +93,15 @@ export default function useApplicationData() {
       });
     });
   }, []);
+
+  useEffect(() => {
+    socket.onopen = () => {
+      socket.send('ping');
+    }
+    socket.onmessage = (event) => {
+      console.log(event.data);
+    }
+  })
 
   return {
     state,
