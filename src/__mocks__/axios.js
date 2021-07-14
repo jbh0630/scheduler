@@ -1,3 +1,5 @@
+// import axios from "axios";
+
 const fixtures = {
   days: [
     {
@@ -95,3 +97,7 @@ export default {
     })
   })
 }
+
+// it("shows the delete error when failing to delete an existing appointment", () => {
+//   axios.put.mockRejectedValueOnce();
+// });

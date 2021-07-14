@@ -5,7 +5,6 @@ export default function useApplicationData() {
   const SET_DAY = "SET_DAY";
   const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
   const SET_INTERVIEW = "SET_INTERVIEW";
-  const SET_DAYS = "SET_DAYS";
   const socket = new WebSocket('ws://localhost:8001');
 
   function reducer(state, action) {
@@ -20,21 +19,22 @@ export default function useApplicationData() {
           interviewers: action.interviewers,
         };
       case SET_INTERVIEW: {
-        return {
-          ...state,
-          appointments: {
+          const states = {
+            ...state,
+            appointments: {
             ...state.appointments,
             [action.id]: {
               ...state.appointments[action.id],
-              interview: action.interview === null ? null : action.interview,
-            },
-          },
-        };
-      }
-      case SET_DAYS: {
+              interview: action.interview
+            }
+          }
+        }
         return {
-          ...state,
-          days: action.days,
+          ...states,
+          days: state.days.map(day => ({
+            ...day,
+            spots: updateSpots(states, day.name)
+          }))
         };
       }
       default:
@@ -53,30 +53,26 @@ export default function useApplicationData() {
 
   const setDay = (day) => dispatch({ type: SET_DAY, day });
 
+  function updateSpots(state, day) {
+    return state.days.find(d => d.name === day)
+      .appointments
+      .reduce((acc, cur) => {return state.appointments[cur].interview ? acc : acc + 1}, 0)
+  }
+
   function bookInterview(id, interview) {
     return axios
       .put(`api/appointments/${id}`, { interview })
       .then(() => {
         dispatch({ type: SET_INTERVIEW, id, interview });
       })
-      .then(() =>
-        axios.get("/api/days").then((res) => {
-          dispatch({ type: SET_DAYS, days: res.data });
-        })
-      );
   }
 
   function cancelInterview(id) {
     return axios
       .delete(`api/appointments/${id}`)
       .then(() => {
-        dispatch({ type: SET_INTERVIEW, id, interview: null });
+        dispatch({ type: SET_INTERVIEW, id, interview: null});
       })
-      .then(() =>
-        axios.get("/api/days").then((res) => {
-          dispatch({ type: SET_DAYS, days: res.data });
-        })
-      );
   }
 
   useEffect(() => {
