@@ -83,17 +83,15 @@ export default {
     }
   }),
   put: jest.fn(() => {
-    return Promise.resolve({
-      status: 200,
-      statusText: "OK",
-      data: fixtures.appointments
+    return Promise.resolve({ 
+      status: 204, 
+      statusText: "No Content" 
     })
   }),
   delete: jest.fn(() => {
-    return Promise.resolve({
-      status: 200,
-      statusText: "OK",
-      data: null
+    return Promise.resolve({ 
+      status: 204, 
+      statusText: "No Content" 
     })
   })
 }
