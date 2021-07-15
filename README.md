@@ -1,4 +1,5 @@
 # Interview Scheduler
+This project is React based project to create appointments for students to book an interview with interviewers in real-time.
 
 ## Setup
 
