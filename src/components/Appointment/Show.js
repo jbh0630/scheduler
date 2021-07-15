@@ -1,5 +1,6 @@
 import React from "react";
 
+//Print all the appointments on the scheduler
 export default function Show(props) {
   return (
     <main className="appointment__card appointment__card--show">

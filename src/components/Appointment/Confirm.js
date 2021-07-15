@@ -1,7 +1,7 @@
 import React from "react";
 
 import Button from "components/Button";
-
+//Confirm function returning
 export default function Confirm(props) {
 
   return(

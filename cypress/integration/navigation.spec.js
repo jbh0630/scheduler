@@ -1,3 +1,4 @@
+//Use Cypress to test
 describe("Navigation", () => {
   it("should visit root", () => {
     cy.visit("/");
